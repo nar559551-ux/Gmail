@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Credential Auto Assign</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+  #container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  button { padding: 10px 15px; font-size: 16px; cursor: pointer; }
+  .cred { background: #eee; padding: 10px; margin-top: 20px; border-radius: 5px; }
+</style>
+</head>
+<body>
+<div id="container">
+  <h2>জিমেইল তৈরি করার তথ্য নিন</h2>
+  <p>নিচের বাটনে ক্লিক করলে   Fast Name Gmail password পাবেন।</p>
+  <button id="getCredBtn">লগইন তথ্য দেখুন</button>
+  <div id="credBox" class="cred" style="display:none;"></div>
+</div>
+
+<script>
+  const credentials = [
+    {email: "irizapeki862@gmail.com", password: "dnytGqEFU3ITexJ"},
+    {email: "ozoyesasupi027@gmail.com", password: "CkZMDDf9S8tdVlU"},
+    {email: "ubibehuneti02@gmail.com", password: "zdFVqktZAIVT"},
+    {email: "edufesojo99@gmail.com", password: "aIwDbe2gKjXiHWU"},
+    {email: "rufolihege920@gmail.com", password: "2GHnjTYoR3lV"},
+    {email: "aforajobofa04@gmail.com", password: "KHHIcDsSXAh13"},
+    {email: "hunafog682@gmail.com", password: "bKGbtBWkQqHQe"},
+    {email: "pexawuqiduz11@gmail.com", password: "MURncQJrilP43d8"},
+    {email: "bubekozip482@gmail.com", password: "46du4u1uNBNk"},
+    {email: "xuxeyojey764@gmail.com", password: "7nLTFy7512BdZ"}
+  ];
+
+  function getAssignedIndex() {
+    let index = localStorage.getItem("assignedIndex");
+    if (index !== null && credentials[index]) {
+      return parseInt(index);
+    }
+    return null;
+  }
+
+  function assignCredential() {
+    let assignedIndex = getAssignedIndex();
+    if (assignedIndex !== null) {
+      return assignedIndex;
+    }
+    // Find first unused index
+    for(let i = 0; i < credentials.length; i++) {
+      if (!localStorage.getItem("used_"+i)) {
+        localStorage.setItem("assignedIndex", i);
+        localStorage.setItem("used_"+i, "true");
+        return i;
+      }
+    }
+    return null; // No creds left
+  }
+
+  document.getElementById("getCredBtn").addEventListener("click", function() {
+    let index = assignCredential();
+    let credBox = document.getElementById("credBox");
+    if (index === null) {
+      credBox.style.display = "block";
+      credBox.innerHTML = "<b>দুঃখিত, আর কোনো credential বাকি নেই।</b>";
+      return;
+    }
+    let cred = credentials[index];
+    credBox.style.display = "block";
+    credBox.innerHTML = `<b>Email:</b> ${cred.email} <br> <b>Password:</b> ${cred.password}`;
+  });
+</script>
+</body>
+</html>
